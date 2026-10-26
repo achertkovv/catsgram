@@ -34,6 +34,16 @@
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
     </dependencies>
 
     <!-- блок настройки процесса сборки -->
@@ -54,12 +64,24 @@
                 <version>3.3.1</version>
                 <configuration>
                     <configLocation>checkstyle.xml</configLocation>
+                    <!-- 1. Проверять также и тестовые исходники -->
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <!-- 2. Падать при ошибках (синтаксических) и нарушениях правил -->
+                    <failsOnError>true</failsOnError>
+                    <failOnViolation>true</failOnViolation>
+                    <!-- 3. Выводить все найденные нарушения в консоль Maven -->
+                    <logViolationsToConsole>true</logViolationsToConsole>
+                    <!-- Указываем, что нарушения уровня 'error' должны ломать сборку -->
+                    <violationSeverity>error</violationSeverity>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
                         </goals>
+                        <!-- Привязываем проверку к фазе verify.
+                        Это позволяет сначала собрать JAR, а затем проверить код.
+                        Если проверка критична до сборки, можно оставить 'compile'. -->
                         <phase>compile</phase>
                     </execution>
                 </executions>
